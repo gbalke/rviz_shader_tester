@@ -35,6 +35,7 @@ public:
   }
 
 private:
+
   void timer_callback()
   {
     auto cur_time = this->now();
@@ -60,25 +61,40 @@ private:
     face_msg_.points.resize(3);
     face_msg_.colors.clear();
     face_msg_.colors.resize(3);
+    face_msg_.uv_coordinates.clear();
+    face_msg_.uv_coordinates.resize(3);
 
     face_msg_.points.at(0) = Point(5, 0, 0);
     face_msg_.points.at(1) = Point(-5, -5, 0);
     face_msg_.points.at(2) = Point(-5, 5, 0);
 
+    // Color the entire triangle white.
     face_msg_.colors.at(0).r = 1.0;
     face_msg_.colors.at(0).g = 1.0;
     face_msg_.colors.at(0).b = 1.0;
     face_msg_.colors.at(0).a = 1.0;
 
-    face_msg_.colors.at(1).r = 0.0;
-    face_msg_.colors.at(1).g = 0.0;
-    face_msg_.colors.at(1).b = 0.0;
+    face_msg_.colors.at(1).r = 1.0;
+    face_msg_.colors.at(1).g = 1.0;
+    face_msg_.colors.at(1).b = 1.0;
     face_msg_.colors.at(1).a = 1.0;
 
-    face_msg_.colors.at(2).r = 0.0;
-    face_msg_.colors.at(2).g = 0.0;
-    face_msg_.colors.at(2).b = 0.0;
+    face_msg_.colors.at(2).r = 1.0;
+    face_msg_.colors.at(2).g = 1.0;
+    face_msg_.colors.at(2).b = 1.0;
     face_msg_.colors.at(2).a = 1.0;
+
+    // Define the texture coordinates for the triangle.
+    face_msg_.uv_coordinates.at(0).u = 1.0;
+    face_msg_.uv_coordinates.at(0).v = 0.0;
+
+    face_msg_.uv_coordinates.at(1).u = 0.0;
+    face_msg_.uv_coordinates.at(1).v = 0.0;
+
+    face_msg_.uv_coordinates.at(2).u = 0.0;
+    face_msg_.uv_coordinates.at(2).v = 0.0;
+
+    face_msg_.texture_map = "/tmp/texture.png";
   }
 
   visualization_msgs::msg::Marker face_msg_;
