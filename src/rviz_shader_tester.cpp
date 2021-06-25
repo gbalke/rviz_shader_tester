@@ -94,7 +94,7 @@ private:
     face_msg_.uv_coordinates.at(2).u = 0.0;
     face_msg_.uv_coordinates.at(2).v = 0.0;
 
-    face_msg_.texture_map = "/tmp/texture.png";
+    face_msg_.texture_map = "file:///tmp/texture.png";
   }
 
   visualization_msgs::msg::Marker face_msg_;
