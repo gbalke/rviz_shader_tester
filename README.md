@@ -9,3 +9,6 @@ will enable complex coloring of markers.
 
 ## Goal Image
 ![image](https://user-images.githubusercontent.com/11024792/119878911-8ac3bc00-bedf-11eb-865d-a6dc6594a136.png)
+
+## Achieved image
+![image](https://user-images.githubusercontent.com/11024792/123488677-3dfa0080-d5c5-11eb-9e42-4f3fd3fe2934.png)
