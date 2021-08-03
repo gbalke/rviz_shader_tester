@@ -20,6 +20,25 @@ geometry_msgs::msg::Point Point(double x, double y, double z)
   return msg;
 }
 
+template <typename T>
+T clip(const T& n, const T& lower, const T& upper) {
+  return std::max(lower, std::min(n, upper));
+}
+
+void create_color(double value, double & red, double & green, double & blue) {
+  red = clip(((value - 0.25) * 4.0), 0.0, 1.0);
+  green = clip(((value - 0.5) * 4.0), 0.0, 1.0);
+  if (value < 0.25) {
+    blue = clip(value * 4.0, 0.0, 1.0);
+  }
+  else if (value > 0.75) {
+    blue = clip((value - 0.75) * 4.0, 0.0, 1.0);
+  }
+  else {
+    blue = clip(1.0 - (value - 0.25) * 4.0, 0.0, 1.0);
+  }
+}
+
 class Publisher : public rclcpp::Node
 {
 public:
@@ -35,6 +54,7 @@ public:
   }
 
 private:
+  const size_t TEXTURE_SIZE = 1024;
 
   void timer_callback()
   {
@@ -65,8 +85,8 @@ private:
     face_msg_.uv_coordinates.resize(3);
 
     face_msg_.points.at(0) = Point(5, 0, 0);
-    face_msg_.points.at(1) = Point(-5, -5, 0);
-    face_msg_.points.at(2) = Point(-5, 5, 0);
+    face_msg_.points.at(1) = Point(-5, 5, 0);
+    face_msg_.points.at(2) = Point(-5, -5, 0);
 
     // Color the entire triangle white.
     face_msg_.colors.at(0).r = 1.0;
@@ -94,7 +114,16 @@ private:
     face_msg_.uv_coordinates.at(2).u = 0.0;
     face_msg_.uv_coordinates.at(2).v = 0.0;
 
-    face_msg_.texture_map = "file:///tmp/texture.png";
+    face_msg_.texture.data.resize(TEXTURE_SIZE * 3);
+    double red, green, blue;
+    for (size_t i = 0; i < TEXTURE_SIZE; i++) {
+      create_color((double) i / TEXTURE_SIZE, red, green, blue);
+      face_msg_.texture.data[(i*3) + 0] = (uint8_t)(red * 255.0);
+      face_msg_.texture.data[(i*3) + 1] = (uint8_t)(green * 255.0);
+      face_msg_.texture.data[(i*3) + 2] = (uint8_t)(blue * 255.0);
+    }
+    face_msg_.texture.width = TEXTURE_SIZE;
+    face_msg_.texture.height = 1;
   }
 
   visualization_msgs::msg::Marker face_msg_;
