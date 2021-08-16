@@ -13,6 +13,7 @@ find_package(geometry_msgs REQUIRED)
 
 add_library(${PROJECT_NAME}
   src/rviz_shader_tester.cpp
+  src/lodepng.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -28,8 +29,17 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 ## Declare a C++ executable
-add_executable(${PROJECT_NAME}_node src/rviz_shader_tester.cpp)
+add_executable(${PROJECT_NAME}_node
+  src/rviz_shader_tester.cpp
+  src/lodepng.cpp
+)
+target_include_directories(${PROJECT_NAME}_node PUBLIC
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+  "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>"
+  "$<INSTALL_INTERFACE:include>"
+)
 ament_target_dependencies(${PROJECT_NAME}_node rclcpp)
+
 ## Specify libraries to link a library or executable target against
 target_link_libraries(
   ${PROJECT_NAME}_node

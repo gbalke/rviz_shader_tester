@@ -6,6 +6,8 @@
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
+#include "lodepng.h"
+
 #include <chrono>
 
 using namespace std::chrono_literals;
@@ -114,16 +116,18 @@ private:
     face_msg_.uv_coordinates.at(2).u = 0.0;
     face_msg_.uv_coordinates.at(2).v = 0.0;
 
-    face_msg_.texture.data.resize(TEXTURE_SIZE * 3);
+    std::vector<uint8_t> image(TEXTURE_SIZE * 4);
     double red, green, blue;
     for (size_t i = 0; i < TEXTURE_SIZE; i++) {
       create_color((double) i / TEXTURE_SIZE, red, green, blue);
-      face_msg_.texture.data[(i*3) + 0] = (uint8_t)(red * 255.0);
-      face_msg_.texture.data[(i*3) + 1] = (uint8_t)(green * 255.0);
-      face_msg_.texture.data[(i*3) + 2] = (uint8_t)(blue * 255.0);
+      image[(i*4) + 0] = (uint8_t)(red * 255.0);
+      image[(i*4) + 1] = (uint8_t)(green * 255.0);
+      image[(i*4) + 2] = (uint8_t)(blue * 255.0);
+      image[(i*4) + 3] = (uint8_t)(255);
     }
-    face_msg_.texture.width = TEXTURE_SIZE;
-    face_msg_.texture.height = 1;
+    lodepng::encode(face_msg_.texture.data, image, TEXTURE_SIZE, 1);
+    face_msg_.texture_resource = "texture_embedded://heat_map.png";
+    face_msg_.texture.format = "png";
   }
 
   visualization_msgs::msg::Marker face_msg_;
