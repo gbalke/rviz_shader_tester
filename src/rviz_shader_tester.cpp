@@ -126,7 +126,7 @@ private:
       image[(i*4) + 3] = (uint8_t)(255);
     }
     lodepng::encode(face_msg_.texture.data, image, TEXTURE_SIZE, 1);
-    face_msg_.texture_resource = "texture_embedded://heat_map.png";
+    face_msg_.texture_resource = "embedded://heat_map.png";
     face_msg_.texture.format = "png";
   }
 
